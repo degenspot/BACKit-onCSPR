@@ -7,7 +7,7 @@ import { NetworkGuard } from './NetworkGuard';
 
 const clickConfig = {
     appName: 'Back It (Onchain)',
-    appId: 'back-it-onchain',
+    appId: 'csprclick-template',
     providers: ['casper-wallet', 'ledger', 'metamask-snap'],
     contentMode: 'iframe', // or 'popup'
     theme: 'dark',
