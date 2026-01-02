@@ -1,0 +1,9 @@
+last_updated = "2026-01-02T04:37:34Z"
+
+[[contracts]]
+name = "CallRegistry"
+package_hash = "hash-467c89cc98decef50db4c389620a67532d5b5a8d47d5d9cd483f1b1760e9c8c8"
+
+[[contracts]]
+name = "OutcomeManager"
+package_hash = "hash-73665999f86adb471409efa5223a03c811425149d70023eb4263bc55a6062371"

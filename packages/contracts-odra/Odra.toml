@@ -1,0 +1,10 @@
+name = "contracts_odra"
+version = "0.1.0"
+
+[[contracts]]
+name = "CallRegistry"
+fqn = "contracts_odra::CallRegistry"
+
+[[contracts]]
+name = "OutcomeManager"
+fqn = "contracts_odra::OutcomeManager"

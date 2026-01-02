@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+.env
+.DS_Store
+coverage
+.turbo
+*.pem
+packages/contracts-odra/secret_key.pem
+packages/contracts-odra/public_key.pem
+**/.env
+**/.env.*
