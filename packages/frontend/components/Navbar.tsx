@@ -1,25 +1,24 @@
 'use client';
 
-import { useClickRef } from '@make-software/csprclick-react';
+import { useCasperWallet } from './CasperWalletContext';
 import Link from 'next/link';
 
 export function Navbar() {
-    const clickRef = useClickRef();
-    const activeAccount = clickRef?.getActiveAccount();
+    const { isConnected, activePublicKey, requestConnection, disconnectFromSite } = useCasperWallet();
 
     const handleConnect = () => {
-        clickRef?.signIn();
+        requestConnection();
     };
 
     const handleDisconnect = () => {
-        clickRef?.signOut();
+        disconnectFromSite();
     };
 
     return (
         <div className="flex justify-between items-center py-4 px-6 bg-white shadow-sm mb-8">
             <Link href="/feed" className="text-xl font-bold text-indigo-600">Back It (Onchain)</Link>
             <div className="flex items-center gap-4">
-                {!activeAccount ? (
+                {!isConnected || !activePublicKey ? (
                     <button
                         onClick={handleConnect}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
@@ -30,7 +29,7 @@ export function Navbar() {
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col items-end">
                             <span className="font-medium text-sm">
-                                {activeAccount.public_key ? `${activeAccount.public_key.slice(0, 6)}...${activeAccount.public_key.slice(-4)}` : 'Connected'}
+                                {`${activePublicKey.slice(0, 6)}...${activePublicKey.slice(-4)}`}
                             </span>
                             <span className="text-xs text-muted-foreground">
                                 Casper

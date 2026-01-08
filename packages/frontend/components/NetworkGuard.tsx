@@ -1,10 +1,11 @@
 'use client';
 
-import { useClickRef } from '@make-software/csprclick-react';
+import { useCasperWallet } from './CasperWalletContext';
 import { useEffect, useState } from 'react';
 
 export function NetworkGuard({ children }: { children: React.ReactNode }) {
-    const clickRef = useClickRef();
+    // const { isConnected } = useCasperWallet();
+    // In a real app, we might check if connected to Testnet vs Mainnet
     // In a real app, we might check if connected to Testnet vs Mainnet
     // clickRef?.activeAccount?.chainName
 

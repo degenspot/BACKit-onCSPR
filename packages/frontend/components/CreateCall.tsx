@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useClickRef } from '@make-software/csprclick-react';
+import { useCasperWallet } from './CasperWalletContext';
 
 export function CreateCall() {
-    const clickRef = useClickRef();
-    const address = clickRef?.getActiveAccount()?.public_key;
+    const { activePublicKey } = useCasperWallet();
+    const address = activePublicKey;
     const [token, setToken] = useState('');
     const [amount, setAmount] = useState('');
     const [targetPrice, setTargetPrice] = useState('');

@@ -83,3 +83,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
 }
+
+/* Ensure CSPR Click modal is visible and on top */
+iframe[id^="csprclick-"] {
+    display: block !important;
+    z-index: 9999 !important;
+}

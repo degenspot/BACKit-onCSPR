@@ -1,7 +1,26 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useClickRef } from '@make-software/csprclick-react';
+import { useCasperWallet } from './CasperWalletContext';
+
+// ... inside GlobalStateProvider ...
+
+const { activePublicKey, sign, isConnected } = useCasperWallet();
+
+// ... inside updateProfile ...
+// Replace clickRef.send with sign logic
+// We need to construct the deploy and sign it
+
+// For now, let's just make sure we are using the new context
+// The actual deploy construction needs to happen here instead of relying on clickRef convenience methods if they existed.
+// However, looking at the previous code, it seems we were using clickRef to sign.
+// The native SDK sign method takes a deploy JSON string.
+
+// We need to implement the actual deploy construction using casper-js-sdk if we haven't already.
+// But first, let's swap the hook.
+
+// ...
+
 import { DeployUtil, CLValueBuilder, CLPublicKey, RuntimeArgs } from 'casper-js-sdk';
 
 export interface Call {
@@ -60,8 +79,7 @@ export function GlobalStateProvider({ children }: { children: React.ReactNode })
     const [isLoading, setIsLoading] = useState(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-    const clickRef = useClickRef();
-    const activeAccount = clickRef?.getActiveAccount();
+    const { activePublicKey, isConnected } = useCasperWallet();
 
     const fetchCalls = async () => {
         try {
@@ -98,13 +116,13 @@ export function GlobalStateProvider({ children }: { children: React.ReactNode })
     };
 
     const login = async () => {
-        if (!activeAccount) return;
+        if (!activePublicKey) return;
         setIsLoading(true);
         try {
             const res = await fetch('http://localhost:3001/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ wallet: activeAccount.public_key }),
+                body: JSON.stringify({ wallet: activePublicKey }),
             });
             const user = await res.json();
             setCurrentUser(user);
@@ -116,10 +134,10 @@ export function GlobalStateProvider({ children }: { children: React.ReactNode })
     };
 
     const updateProfile = async (data: { handle: string; bio: string }) => {
-        if (!currentUser || !activeAccount) return;
+        if (!currentUser || !activePublicKey) return;
         setIsLoading(true);
         try {
-            const res = await fetch(`http://localhost:3001/users/${activeAccount.public_key}`, {
+            const res = await fetch(`http://localhost:3001/users/${activePublicKey}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
@@ -140,13 +158,13 @@ export function GlobalStateProvider({ children }: { children: React.ReactNode })
     }, []);
 
     useEffect(() => {
-        if (activeAccount) {
+        if (activePublicKey) {
             login();
         }
-    }, [activeAccount?.public_key]);
+    }, [activePublicKey]);
 
     const createCall = async (newCallData: CreateCallData) => {
-        if (!activeAccount) {
+        if (!activePublicKey) {
             alert("Please connect wallet first");
             return;
         }
@@ -170,15 +188,8 @@ export function GlobalStateProvider({ children }: { children: React.ReactNode })
             });
             const { cid } = await ipfsRes.json();
 
-            // 2. Create Deploy for 'create_call'
-            // NOTE: In a real implementation, we would construct a Deploy calling the Wasm entrypoint.
-            // For MVP, we simulated the flow.
-
-            // const deploy = DeployUtil.makeStandardDeploy(...)
-            // const signedDeploy = await clickRef.sign(deploy, activeAccount.public_key);
-            // await clickRef.send(signedDeploy);
-
-            console.log("Mocking Casper Deploy for Create Call...", { cid, newCallData });
+            // 2. Mock Create Call Logic (using native context vars)
+            // ...
 
             // Simulate network delay
             await new Promise(r => setTimeout(r, 2000));
