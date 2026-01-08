@@ -1,29 +1,32 @@
 'use client';
 
-import { ClickProvider } from '@make-software/csprclick-react';
+import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
-import { GlobalStateProvider } from './GlobalState';
-import { NetworkGuard } from './NetworkGuard';
 
-const clickConfig = {
-    appName: 'Back It (Onchain)',
-    appId: 'csprclick-template',
-    providers: ['casper-wallet', 'ledger', 'metamask-snap'],
-    contentMode: 'iframe', // or 'popup'
-    theme: 'dark',
-};
+import { CasperWalletProvider } from './CasperWalletContext';
+
+// Keep others dynamic to avoid window errors in their own files if they have them
+const GlobalStateProvider = dynamic(
+    () => import('./GlobalState').then(mod => mod.GlobalStateProvider),
+    { ssr: false }
+);
+
+const NetworkGuard = dynamic(
+    () => import('./NetworkGuard').then(mod => mod.NetworkGuard),
+    { ssr: false }
+);
 
 export function Providers(props: {
     children: ReactNode;
 }) {
     return (
-        <ClickProvider options={clickConfig}>
+        <CasperWalletProvider>
             <NetworkGuard>
                 <GlobalStateProvider>
                     {props.children}
                 </GlobalStateProvider>
             </NetworkGuard>
-        </ClickProvider>
+        </CasperWalletProvider>
     );
 }
 
